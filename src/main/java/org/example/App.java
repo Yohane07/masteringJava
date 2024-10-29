@@ -4,6 +4,8 @@ import static java.lang.System.*;
 
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Hello world!
@@ -13,7 +15,6 @@ public class App
 {
     public static void main( String[] args )
     {
-        gererCalcul();
 
     }
 
@@ -111,25 +112,39 @@ public class App
     *
     * */
 
-    Scanner scanner = new Scanner(System.in);
-    String motDePasseUser;
+
     boolean contientMajuscule = false;
     boolean contientUnNombre = false;
     boolean contientCaractereSpecial = false;
 
-   // String mdpAccepte = "";
+
+    public String verificationMotDePasse(){
+        Scanner scanner = new Scanner(System.in);
+        out.println("Entrez votre mot de passe :");
+        String motDePasseUser = scanner.nextLine();
 
 
-    public String verificationMotDePasse(String motDePasseUser){
-        if (motDePasseUser.length()<8){
-            return (motDePasseUser + "n'est pas assez long, votre mot de passe doit contenir au moins 8 caractères");
-        }else {
-            isContientLesBonsCaracteres(motDePasseUser);
+
+        while (motDePasseUser.length()<8){
+            out.println (motDePasseUser + "n'est pas assez long, votre mot de passe doit contenir au moins 8 caractères");
         }
-        return motDePasseUser;
+        if(isContientCaractereSpecial(motDePasseUser) && isContientLesBonsCaracteres(motDePasseUser)){
+            return "mot de passe accepté";
+        }
     }
 
-    public String isContientLesBonsCaracteres(String motDePasseUser) {
+    public boolean isContientCaractereSpecial (String motDePasseUser){
+        Pattern p = Pattern.compile("[\\p{Alpha}]*[\\p{Punct}][\\p{Alpha}]*");
+        Matcher matcher = p.matcher(motDePasseUser);
+        boolean contientCaractereSpe = matcher.matches();
+
+        if (contientCaractereSpe){
+            contientCaractereSpecial = true;
+        }
+        return contientCaractereSpe;
+    }
+
+    public boolean isContientLesBonsCaracteres(String motDePasseUser) {
         for (char lettre :
              motDePasseUser.toCharArray()) {
              if (Character.isUpperCase(lettre))
@@ -137,16 +152,9 @@ public class App
                 contientMajuscule = true;
              }
              else if (Character.isDigit(lettre)){
-                 contientCaractereSpecial = true;
-             }
-             else if (contientMajuscule && contientCaractereSpecial) {
-                 return ("Mot de passe accepté");
-             }
-             else {
-                 return ("Mot de passe incorrect : le mot de passe doit contenir au moins une lettre majuscule et un caractère spécial");
+                 contientUnNombre= true;
              }
         }
-
-        return null;
+        return contientMajuscule && contientUnNombre;
     }
 }
