@@ -15,7 +15,7 @@ public class App
 {
     public static void main( String[] args )
     {
-
+        verificationMotDePasse();
     }
 
     public static void addition(Integer nb1, Integer nb2){
@@ -113,27 +113,26 @@ public class App
     * */
 
 
-    boolean contientMajuscule = false;
-    boolean contientUnNombre = false;
-    boolean contientCaractereSpecial = false;
 
 
-    public String verificationMotDePasse(){
+
+    public static void verificationMotDePasse(){
         Scanner scanner = new Scanner(System.in);
         out.println("Entrez votre mot de passe :");
         String motDePasseUser = scanner.nextLine();
-
-
 
         while (motDePasseUser.length()<8){
             out.println (motDePasseUser + "n'est pas assez long, votre mot de passe doit contenir au moins 8 caractères");
         }
         if(isContientCaractereSpecial(motDePasseUser) && isContientLesBonsCaracteres(motDePasseUser)){
-            return "mot de passe accepté";
+            out.println( "mot de passe accepté");
+        }else {
+            out.println("Mot de passe incorrect : le mot de passe doit contenir au moins un chiffre, une lettre majuscule et un caractère spécial");
         }
     }
 
-    public boolean isContientCaractereSpecial (String motDePasseUser){
+    public static boolean isContientCaractereSpecial (String motDePasseUser){
+        boolean contientCaractereSpecial = false;
         Pattern p = Pattern.compile("[\\p{Alpha}]*[\\p{Punct}][\\p{Alpha}]*");
         Matcher matcher = p.matcher(motDePasseUser);
         boolean contientCaractereSpe = matcher.matches();
@@ -144,7 +143,10 @@ public class App
         return contientCaractereSpe;
     }
 
-    public boolean isContientLesBonsCaracteres(String motDePasseUser) {
+    public static boolean isContientLesBonsCaracteres(String motDePasseUser) {
+        boolean contientMajuscule = false;
+        boolean contientUnNombre = false;
+
         for (char lettre :
              motDePasseUser.toCharArray()) {
              if (Character.isUpperCase(lettre))
