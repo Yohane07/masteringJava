@@ -2,7 +2,7 @@ package org.example;
 
 import static java.lang.System.*;
 
-import java.util.Objects;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,29 +15,57 @@ public class App
 {
     public static void main( String[] args )
     {
-        verificationMotDePasse();
+
+        gestionEtVerificationMdp();
     }
 
-    /* Exercie 4: Verification du mot passe*/
+    public static void ajouterutilisateur(){
+        HashMap<String, String> utilisateurInfos = new HashMap<>();
+        Scanner scanner = new Scanner(System.in);
+        out.println("Entrez le nom utilisateur:");
+        String nomUtilisateur = scanner.nextLine();
+        out.println("Entrez le mdp:");
+        String motDePasse = scanner.nextLine();
+        utilisateurInfos.put(nomUtilisateur, motDePasse);
+        out.println("L'utilisateur" + nomUtilisateur + "a bien été ajouté");
+    }
 
-    /* ALGO
-    * String motDePasseUser;
-    * String tailleMinimum;
-    * boolean contientMajuscule = false;
-    * boolean contientMiniscule = false;
-    * boolean contientUnNombre = false;
-    *
-    * Si motDePasseUser > tailleMinimum
-    *   Si les trois booleans sont vrais
-    *       => votre mot de passe respectes les critères
-    *   Sinon si un des trois est faux
-    *       => renvoyés mdp incorrecte, il doit contenir au moins une Maj, Min , un caractère spécial et un nombre
-    * Sinon
-    *   => Votre mdp doit contenir au moins 8 caractères
-    *
-    *
-    * */
+    public static void connexion(HashMap<String, String> infosLoginEntrees){
+        Scanner scanner = new Scanner(System.in);
+        out.println("Nom d'utilisateur:");
+        String nomUtilisateur = scanner.nextLine();
+        out.println("Entrez le mdp:");
+        String motDePasse = scanner.nextLine();
+        if (infosLoginEntrees.containsKey(nomUtilisateur)
+                && infosLoginEntrees.containsValue(motDePasse))
+        {
+            out.println("Connexion réussie");
+        } else if (!infosLoginEntrees.containsKey(nomUtilisateur)) {
+            out.println("Utilisateur non trouvé");
+        }else if (infosLoginEntrees.containsKey(nomUtilisateur)
+                && !infosLoginEntrees.containsValue(motDePasse)){
+            out.println("mot de passe incorrect");
+            out.println("Entrez le mdp:");
+            scanner.nextLine();
+        }
+    }
 
+    public static void gestionEtVerificationMdp(){
+        Scanner scanner = new Scanner(System.in);
+        int choix = 0;
+        while(choix != 3){
+            out.println("1. Ajouter un utilisateur\n" + "2. Se connecter\n" + "3. Quitter\n" + "Choisissez une option :");
+            choix = scanner.nextInt();
+            if(choix == 1){
+                ajouterutilisateur();
+            } else if (choix == 2) {
+                HashMap<String, String> utilisateurInfos = new HashMap<>();
+                connexion(utilisateurInfos);
+            }else {
+                out.println("Au revoir !");
+            }
+        }
+    }
 
     public static void verificationMotDePasse(){
         Scanner scanner = new Scanner(System.in);
@@ -54,7 +82,8 @@ public class App
         if(isContientCaractereSpecial(motDePasseUser) && isContientLesBonsCaracteres(motDePasseUser)){
             out.println( "mot de passe accepté");
         }else {
-            out.println("Mot de passe incorrect : le mot de passe doit contenir au moins un chiffre, une lettre majuscule et un caractère spécial");
+            out.println("Mot de passe incorrect : le mot de passe doit contenir au moins un chiffre, " +
+                    "une lettre majuscule et un caractère spécial");
         }
     }
 
@@ -160,4 +189,5 @@ public class App
     }
 
      */
+
 }
